@@ -85,9 +85,42 @@ class Modify:
                 df_copy.loc[index, 'Milage'] = mean_milage
         return df_copy 
     
+class Visualize:
+    def __init__(self,df:pd.DataFrame):
+        self.df = df
+        self.df['Year'] = pd.to_datetime(self.df['Year'], format='%Y')
+        self.df['Year'] = self.df['Year'].dt.year
+       
     
+    #this method is for visualizing the data 
+    def comparing_Year_with_Milage_price(self) -> None:
+        df_copy = self.df.copy()
+        fig,axes = plt.subplots(1,2,figsize=(15,5))
+        sns.lineplot(data=df_copy, x='Year', y='Milage', ax=axes[0])
+        axes[0].set_title('Year vs Milage')
+        sns.lineplot(data=df_copy, x='Year', y='Price', ax=axes[1])
+        axes[1].set_title('Year vs Price')
+    
+    def heat_map(self,list_numeric_columns : list) -> None:
+        df_numeric_columns = self.df[list_numeric_columns].copy()
+        plt.figure(figsize=(12, 8))
+        sns.heatmap(df_numeric_columns.corr(), annot=True, cmap='crest', fmt='.2f')
+        plt.title('Correlation Heatmap')
+        plt.show()
+    def Distribution_of_Price_Mileage_Year(self,df : pd.DataFrame) -> None:
+        df_copy = df.copy()
+        fig, axes = plt.subplots(1, 3, figsize=(15, 5))
+        sns.histplot(df_copy['Price'], bins=20, kde=True, ax=axes[0])
+        axes[0].set_title('Price Distribution')
+        sns.histplot(df_copy['Milage'], bins=20, kde=True, ax=axes[1])
+        axes[1].set_title('Mileage Distribution')
+        sns.histplot(df_copy['Year'], bins=20, kde=True, ax=axes[2])
+        axes[2].set_title('Year Distribution')
+    
+    def piechart(self):
+        df_copy = self.df.groupby('Transmission')
+        
 
-     
-    
+        
     
    
